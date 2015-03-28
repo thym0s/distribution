@@ -4,16 +4,18 @@
 #include "monotone.h"
 
 int main( int argc , char ** argv ) {
-  std::vector< unsigned int > a = { 6 , 0 , 0 };
+  std::vector< unsigned int > a = { 20 , 0 , 0 };
   std::vector< unsigned int > b = { 1 , 2 , 1 };
   for ( auto i : a ) {
     std::cout << i << ' ';
   }
-  dist_monotone( a.begin() , a.end() , b.begin() , 6 , 3 );
-  for ( auto i : a ) {
-    std::cout << i << ' ';
+  std::cout << '\n' << accumulate_weight( a.begin() , a.end() , b.begin() , 1 ) << '\n';
+  while( next_monotone( a.begin() , a.end() , b.begin() ) ) {
+    for ( auto i : a ) {
+      std::cout << i << ' ';
+    }
+    std::cout << '\n';
   }
-  next_monotone( a.begin() , a.end() , b.begin() );
   for ( auto i : a ) {
     std::cout << i << ' ';
   }

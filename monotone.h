@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <functional>
+#include <iostream>
 
 template < class BidirectionalIterator1 ,
            class BidirectionalIterator2 ,
@@ -14,38 +15,54 @@ template < class BidirectionalIterator1 ,
     return init;
   } 
 
-template < class BidirectionalIterator1 , class BidirectionalIterator2 >
-  bool dist_monotone( BidirectionalIterator1 first ,
+template < class BidirectionalIterator1 ,
+           class BidirectionalIterator2 ,
+           class T >
+  T dist_monotone( BidirectionalIterator1 first ,
                       BidirectionalIterator1 last ,
                       BidirectionalIterator2 first_weight ,
-                      unsigned int amount ,
-                      unsigned int limit ) {
+                      T amount ,
+                      T limit ) {
+    typedef typename std::iterator_traits< BidirectionalIterator1 >::value_type value_type;
     if( first == last ) {
-      return false;
+      return amount;
     } else {
-      *first = limit = std::min( amount / *first_weight , limit );
-      return dist_monotone( ++first , last , ++first_weight , amount - *first , limit );
+      *first = limit = std::min< value_type >( amount / *first_weight , limit );
+      value_type remainder = amount - *first * *first_weight;
+      return dist_monotone< BidirectionalIterator1 ,
+                            BidirectionalIterator2 ,
+                            T > ( ++first , last , ++first_weight , remainder , limit );
     }
   }
 
-template < class BidirectionalIterator1 , class BidirectionalIterator2 >
+template < class BidirectionalIterator1 ,
+           class BidirectionalIterator2 >
   bool next_monotone( BidirectionalIterator1 first ,
                       BidirectionalIterator1 last ,
                       BidirectionalIterator2 first_weight ) {
-    std::reverse_iterator< BidirectionalIterator1 > pr =
-      std::find_if( std::reverse_iterator< BidirectionalIterator1 >( last ) ,
-                    std::reverse_iterator< BidirectionalIterator1 >( first ) ,
-                    std::bind1st( std::greater< unsigned int >() , 1 ) );
+    typedef typename std::reverse_iterator< BidirectionalIterator1 > rit_type;
+    typedef typename std::iterator_traits< BidirectionalIterator1 >::value_type value_type;
+    rit_type pr = std::find_if( rit_type( last ) ,
+                    rit_type( first ) ,
+                    std::bind1st( std::less< value_type >() , value_type(1) ) );
     BidirectionalIterator1 p = pr.base();
     BidirectionalIterator2 q = first_weight + ( p - first );
-    for( ; p != first ; --first ) {
-      unsigned int limit = --*( p - 1 );
-      if( dist_monotone( p , last , q ,
-                        accumulate_weight( p , last , q , 0 ) ,
-                        limit ) ) {
-        return true;
+    value_type remainder = value_type( 0 );
+    for( ; p != first ; --p , --q ) {
+      for( ; value_type( 0 ) < --*( p - 1) ; ) {
+        std::cout << 'A' << *(q - 1) << '\n';
+        std::cout << 'B' << accumulate_weight( p , last , q , value_type( *( q - 1) ) ) << '\n';
+        remainder += accumulate_weight( p , last , q , value_type( *( q - 1) ) ) ,
+        std::cout << 'C' << remainder << '\n';
+        remainder = dist_monotone( p , last , q , remainder , *( p - 1) );
+        if( remainder == value_type( 0 ) ) {
+          return true;
+        }
+        std::cout << 'D' << remainder << '\n';
       }
     }
+    remainder += accumulate_weight( p , last , q , value_type(0) );
+    dist_monotone( p , last ,  q , remainder , remainder );
     return false;
   }
 
