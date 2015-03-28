@@ -10,14 +10,14 @@ OBJS=$(subst .cpp,.o,$(SRCS))
 all: distribution
 
 distribution: $(OBJS)
-    $(CXX) -o distribution $(OBJS)
+	$(CXX) -o distribution $(OBJS)
 
 distribution.o: distribution.cpp distribution.h
 
 result.o: result.cpp result.h
 
 clean:
-    $(RM) $(OBJS)
+	$(RM) $(OBJS)
 
 dist-clean: clean
-    $(RM) distribution
+	$(RM) distribution
