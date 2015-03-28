@@ -9,7 +9,7 @@ int main( int argc , char ** argv ) {
   for ( auto i : a ) {
     std::cout << i << ' ';
   }
-  std::cout << '\n' << accumulate_weight( a.begin() , a.end() , b.begin() , 1 ) << '\n';
+  std::cout << '\n' << accumulate_weight( a.begin() , a.end() , b.begin() , 0 ) << '\n';
   while( next_monotone( a.begin() , a.end() , b.begin() ) ) {
     for ( auto i : a ) {
       std::cout << i << ' ';

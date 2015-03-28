@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <functional>
-#include <iostream>
 
 template < class BidirectionalIterator1 ,
            class BidirectionalIterator2 ,
@@ -49,16 +48,13 @@ template < class BidirectionalIterator1 ,
     BidirectionalIterator2 q = first_weight + ( p - first );
     value_type remainder = value_type( 0 );
     for( ; p != first ; --p , --q ) {
-      for( ; value_type( 0 ) < --*( p - 1) ; ) {
-        std::cout << 'A' << *(q - 1) << '\n';
-        std::cout << 'B' << accumulate_weight( p , last , q , value_type( *( q - 1) ) ) << '\n';
+      for( ; value_type( 1 ) < *( p - 1) ; ) {
+        --*( p - 1 );
         remainder += accumulate_weight( p , last , q , value_type( *( q - 1) ) ) ,
-        std::cout << 'C' << remainder << '\n';
         remainder = dist_monotone( p , last , q , remainder , *( p - 1) );
         if( remainder == value_type( 0 ) ) {
           return true;
         }
-        std::cout << 'D' << remainder << '\n';
       }
     }
     remainder += accumulate_weight( p , last , q , value_type(0) );
