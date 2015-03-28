@@ -1,6 +1,6 @@
 CXX=g++
 RM=rm -f
-CPPFLAGS=-g -Wall -pedantic
+CPPFLAGS=-g -std=c++11 -Wall -pedantic
 LDFLAGS=-g $(shell root-config --ldflags)
 LDLIBS=$(shell root-config --libs)
 
@@ -12,7 +12,7 @@ all: distribution
 distribution: $(OBJS)
 	$(CXX) -o distribution $(OBJS)
 
-distribution.o: distribution.cpp 
+distribution.o: distribution.cpp monotone.h
 
 monotone.o: monotone.cpp monotone.h
 
