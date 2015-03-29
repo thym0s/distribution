@@ -30,11 +30,11 @@ T dist_monotone( BidirectionalIterator1 first ,
   }
 }
 
-/* Calculates the next monotone decreasing partition (in the lexicographic order)
+/* Calculates the next monotone decreasing partition (lexicographic ordering)
    in [ first , last ), with additional amount.
-   The variable amount is changed to the amount remaining after the distribution.
-   Returns false iff the partition was the last one in the order, and changes it to
-   the first one.
+   The variable amount is changed to amount remaining after distributing.
+   Returns false iff the partition was the last one in the order, and changes
+   it to the first one.
 */
 template < class BidirectionalIterator1 ,
            class BidirectionalIterator2 ,
@@ -68,10 +68,10 @@ bool next_monotone_r( BidirectionalIterator1 first ,
   return ret;
 }
 
-/* Calculates the next monotone decreasing partition (in the lexicographic order)
+/* Calculates the next monotone decreasing partition (lexicographic ordering)
    in [ first , last ).
-   Returns false iff the partition was the last one in the order, and changes it to
-   the first one.
+   Returns false iff the partition was the last one in the order, and changes
+   it to the first one.
 */
 template < class BidirectionalIterator1 ,
            class BidirectionalIterator2 >
